@@ -8,13 +8,9 @@ var config = {
   };
   firebase.initializeApp(config);
 
+  var messagesRef = firebase.database().ref('messages');
 
-function getInputVal(id){
-  return document.getElementById(id).value;
-}
-
-
-function saveMessage(name, email, pass, text){
+  function saveMessage(name, email, pass, text){
   var messagesRef = firebase.database().ref('messages');
   var newMessageRef = messagesRef.push();
   newMessageRef.set({
@@ -23,15 +19,24 @@ function saveMessage(name, email, pass, text){
     text: text
   });
 }
-function submitForm(e){
-    e.preventDefault();
-    // Get values
-    var name = getInputVal('fname');
+document.getElementById('contactForm').addEventListener('submit', submitForm);
+function submitForm(e) {
+	e.preventDefault();
+	
+	var name = getInputVal('fname');
     var email = getInputVal('adress');
     var pass = getInputVal('pass');
     var text = getInputVal('subject');
 
     saveMessage(name, email, pass, text);
+    // Show alert
+document.querySelector('.alert').style.display = 'block';
+// Hide alert after 3 seconds
+setTimeout(function(){
+  document.querySelector('.alert').style.display = 'none';
+},3000);
+    document.getElementById('contactForm').reset();
 }
-
-document.getElementById('contactForm').addEventListener('submit', submitForm(e));
+function getInputVal(id){
+  return document.getElementById(id).value;
+}
